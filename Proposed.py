@@ -10,11 +10,6 @@ eps = 2.2204e-16
 def Proposed(X, Y, select_nub, alpha, beta, gamma):
     num, dim = np.shape(X)
     num, label_num = np.shape(Y)
-    # options = {'metric': 'euclidean', 'neighbor_mode': 'knn', 'k': 5, 'weight_mode': 'heat_kernel', 't': 1.0}
-    # Ms = construct_W(Y.T, **options)
-    # Ms = Ms.A
-    # As = np.diag(np.sum(Ms, 0))
-    # Ls = As - Ms
 
     k = int(label_num * 2 / 3.0)  # TODO:临时使用的值
     W = np.random.rand(dim, label_num)
@@ -88,49 +83,6 @@ def Proposed(X, Y, select_nub, alpha, beta, gamma):
         if (iter > 2 and (cver < 1e-3 or iter == 1000)):
             break
 
-    obj_value = np.array(obj)
-    obj_function_value = []
-    for i in range(iter):
-        temp_value = float(obj_value[i])
-        obj_function_value.append(temp_value)
-    score = np.sum(np.multiply(W, W), 1)
-    idx = np.argsort(-score, axis=0)
-    idx = idx.T.tolist()
-    l = [i for i in idx]
-    n = 1
-    F = [l[i:i + n] for i in range(0, len(l), n)]
-    F = np.matrix(F)
-
-    ll = [i for i in obj_function_value]
-    n = 1
-    F_value = [ll[i:i + n] for i in range(0, len(ll), n)]
-    F_value = np.matrix(F_value)
-    return F[0:select_nub, :], F_value[:, :], iter
+    return W
 
 
-if __name__ == "__main__":
-    X = np.array([[1, 0, 0, 1, 0, 1, 2, 3],
-                  [1, 0, 2, 0, 1, 1, 1, 2],
-                  [2, 1, 1, 0, 0, 2, 2, 1],
-                  [1, 0, 0, 1, 1, 1, 2, 1],
-                  [3, 2, 1, 1, 1, 1, 3, 3],
-                  [1, 1, 1, 1, 1, 2, 2, 3],
-                  [1, 0, 0, 1, 1, 2, 2, 2],
-                  [1, 1, 0, 1, 0, 2, 2, 0],
-                  [1, 1, 0, 0, 0, 0, 2, 2],
-                  [0, 1, 0, 1, 1, 2, 2, 2]])
-
-    Y = np.array([[1, 0, 0, 1, 1],
-                  [1, 1, 0, 1, 0],
-                  [0, 0, 1, 1, 0],
-                  [0, 1, 0, 0, 1],
-                  [0, 1, 0, 1, 0],
-                  [1, 0, 0, 0, 0],
-                  [0, 1, 1, 0, 0],
-                  [0, 0, 1, 0, 1],
-                  [0, 1, 0, 0, 1],
-                  [1, 1, 0, 1, 0]])
-    aa, bb, cc = Proposed(X, Y, select_nub=5, alpha=0.1, beta=0.1, gamma=0.3)
-    print aa
-    print bb
-    print cc
