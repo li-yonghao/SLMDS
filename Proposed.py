@@ -2,10 +2,8 @@
 import numpy as np
 from skfeature.utility.construct_W import construct_W
 from numpy import linalg as LA
-from numpy.random import seed
 from L2_distance_1 import L2_distance_1
 from EProjSimplex_new import EProjSimplex_new
-
 eps = 2.2204e-16
 
 
@@ -19,7 +17,6 @@ def Proposed(X, Y, select_nub, alpha, beta, gamma):
     # Ls = As - Ms
 
     k = int(label_num * 2 / 3.0)  # TODO:临时使用的值
-    seed(1)
     W = np.random.rand(dim, label_num)
     V = np.random.rand(label_num, k)
     B = np.random.rand(k, label_num)
